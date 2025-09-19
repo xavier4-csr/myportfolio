@@ -17,12 +17,10 @@ from .serializers import (
 class ProfileView(generics.RetrieveAPIView):
     """Get profile information"""
     serializer_class = ProfileSerializer
-    
+
     def get_object(self):
-        # Get the first (and hopefully only) profile
         profile = Profile.objects.first()
         if not profile:
-            # Create a default profile if none exists
             profile = Profile.objects.create(
                 name="Your Name",
                 title="Full Stack Developer",
@@ -35,8 +33,16 @@ class ProfileView(generics.RetrieveAPIView):
             )
         return profile
 
+    def put(self, request, *args, **kwargs):
+        profile = self.get_object()
+        serializer = ProfileSerializer(profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET'])
+
+@api_view(['GET', 'PUT'])
 def skills_view(request):
     """Get all skills data"""
     technical_skills = TechnicalSkill.objects.filter(is_active=True)
@@ -54,54 +60,15 @@ def skills_view(request):
         ]
         for skill_data in default_technical:
             TechnicalSkill.objects.create(**skill_data)
-        technical_skills = TechnicalSkill.objects.filter(is_active=True)
-    
-    if not professional_skills.exists():
-        default_professional = [
-            {'name': 'Communication', 'icon': 'message-square'},
-            {'name': 'Time Management', 'icon': 'clock'},
-            {'name': 'Teamwork', 'icon': 'users'},
-            {'name': 'Problem Solving', 'icon': 'target'},
-        ]
-        for skill_data in default_professional:
-            ProfessionalSkill.objects.create(**skill_data)
-        professional_skills = ProfessionalSkill.objects.filter(is_active=True)
-    
-    if not technologies.exists():
-        default_technologies = [
-            {'name': 'React', 'icon_url': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg'},
-            {'name': 'Python', 'icon_url': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg'},
-            {'name': 'Django', 'icon_url': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg'},
-            {'name': 'JavaScript', 'icon_url': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg'},
-            {'name': 'PostgreSQL', 'icon_url': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg'},
-            {'name': 'Git', 'icon_url': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg'},
-        ]
-        for tech_data in default_technologies:
-            Technology.objects.create(**tech_data)
-        technologies = Technology.objects.filter(is_active=True)
-    
-    response_data = {
-        'technical': [{'name': skill.name, 'level': skill.level} for skill in technical_skills],
-        'professional': [{'name': skill.name, 'icon': skill.icon} for skill in professional_skills],
-        'technologies': [{'name': tech.name, 'icon': tech.icon_url} for tech in technologies]
-    }
-    
-    return Response(response_data)
-
-
 class ProjectListView(generics.ListAPIView):
-    """Get list of projects"""
+    """Get list of projects and allow updates"""
     serializer_class = ProjectListSerializer
-    
+
     def get_queryset(self):
         queryset = Project.objects.filter(is_active=True)
-        
-        # Filter by featured projects if requested
         featured_only = self.request.query_params.get('featured', None)
         if featured_only == 'true':
             queryset = queryset.filter(is_featured=True)
-        
-        # Limit results if requested
         limit = self.request.query_params.get('limit', None)
         if limit:
             try:
@@ -109,12 +76,69 @@ class ProjectListView(generics.ListAPIView):
                 queryset = queryset[:limit]
             except ValueError:
                 pass
-        
-        # If no projects exist, create some defaults
         if not queryset.exists() and not Project.objects.exists():
             self.create_default_projects()
             queryset = Project.objects.filter(is_active=True)
-        
+        return queryset
+
+    def create_default_projects(self):
+        default_projects = [
+            {
+                'title': 'E-commerce Platform',
+                'description': 'A full-featured e-commerce platform with payment integration and admin dashboard.',
+                'github_url': 'https://github.com/yourusername/ecommerce-platform',
+                'live_url': 'https://your-ecommerce-demo.com',
+                'is_featured': True,
+            },
+            {
+                'title': 'Task Management App',
+                'description': 'A collaborative task management application with real-time updates.',
+                'github_url': 'https://github.com/yourusername/task-manager',
+                'live_url': 'https://your-task-app.com',
+                'is_featured': True,
+            },
+            {
+                'title': 'Portfolio Website',
+                'description': 'A responsive portfolio website showcasing my work and skills.',
+                'github_url': 'https://github.com/yourusername/portfolio',
+                'live_url': 'https://your-portfolio.com',
+                'is_featured': True,
+            }
+        ]
+        for project_data in default_projects:
+            Project.objects.create(**project_data)
+
+    def put(self, request, *args, **kwargs):
+        Project.objects.all().delete()
+        projects = request.data.get('projects', [])
+        if isinstance(projects, str):
+            import json
+            try:
+                projects = json.loads(projects)
+            except Exception:
+                projects = [projects]
+        for proj in projects:
+            if isinstance(proj, dict):
+                Project.objects.create(**proj)
+            else:
+                Project.objects.create(title=str(proj))
+        return Response({'message': 'Projects updated successfully'})
+
+    def get_queryset(self):
+        queryset = Project.objects.filter(is_active=True)
+        featured_only = self.request.query_params.get('featured', None)
+        if featured_only == 'true':
+            queryset = queryset.filter(is_featured=True)
+        limit = self.request.query_params.get('limit', None)
+        if limit:
+            try:
+                limit = int(limit)
+                queryset = queryset[:limit]
+            except ValueError:
+                pass
+        if not queryset.exists() and not Project.objects.exists():
+            self.create_default_projects()
+            queryset = Project.objects.filter(is_active=True)
         return queryset
     
     def create_default_projects(self):
@@ -154,6 +178,22 @@ class ProjectDetailView(generics.RetrieveAPIView):
 
 
 class ExperienceListView(generics.ListAPIView):
+    def put(self, request, *args, **kwargs):
+        # Update experience
+        Experience.objects.all().delete()
+        experience = request.data.get('experience', [])
+        if isinstance(experience, str):
+            import json
+            try:
+                experience = json.loads(experience)
+            except Exception:
+                experience = [experience]
+        for exp in experience:
+            if isinstance(exp, dict):
+                Experience.objects.create(**exp)
+            else:
+                Experience.objects.create(title=str(exp))
+        return Response({'message': 'Experience updated successfully'})
     """Get list of experience and education"""
     serializer_class = ExperienceSerializer
     
@@ -173,7 +213,7 @@ class ExperienceListView(generics.ListAPIView):
         return queryset
     
     def create_default_experience(self):
-        """Create default experience if none exists"""
+        """Create default experience if none exist"""
         from datetime import date
         
         default_experience = [
@@ -207,42 +247,34 @@ class ExperienceListView(generics.ListAPIView):
             Experience.objects.create(**exp_data)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'PUT'])
 def contact_info_view(request):
     """Get contact information"""
-    profile = Profile.objects.first()
-    social_links = SocialLink.objects.filter(is_active=True)
-    
-    # Create default social links if none exist
-    if not social_links.exists():
-        default_social = [
-            {'name': 'GitHub', 'url': 'https://github.com/yourusername', 'icon': 'github'},
-            {'name': 'LinkedIn', 'url': 'https://linkedin.com/in/yourusername', 'icon': 'linkedin'},
-            {'name': 'Twitter', 'url': 'https://twitter.com/yourusername', 'icon': 'twitter'},
-            {'name': 'Instagram', 'url': 'https://instagram.com/yourusername', 'icon': 'instagram'},
-        ]
-        for social_data in default_social:
-            SocialLink.objects.create(**social_data)
+    if request.method == 'GET':
+        profile = Profile.objects.first()
         social_links = SocialLink.objects.filter(is_active=True)
-    
-    if not profile:
-        # Create default profile if none exists
-        profile = Profile.objects.create(
-            name="Your Name",
-            email="your.email@example.com",
-            phone="+1 (234) 567-890",
-            location="City, Country"
-        )
-    
-    response_data = {
-        'email': profile.email,
-        'phone': profile.phone or "+1 (234) 567-890",
-        'location': profile.location,
-        'social': [{'name': link.name, 'url': link.url, 'icon': link.icon} for link in social_links],
-        'resume_url': profile.resume_file.url if profile.resume_file else None
-    }
-    
-    return Response(response_data)
+        # ...existing code...
+        response_data = {
+            'email': profile.email,
+            'phone': profile.phone or "+1 (234) 567-890",
+            'location': profile.location,
+            'social': [{'name': link.name, 'url': link.url, 'icon': link.icon} for link in social_links],
+            'resume_url': profile.resume_file.url if profile.resume_file else None
+        }
+        return Response(response_data)
+    elif request.method == 'PUT':
+        data = request.data
+        profile = Profile.objects.first()
+        if profile:
+            profile.email = data.get('email', profile.email)
+            profile.phone = data.get('phone', profile.phone)
+            profile.location = data.get('location', profile.location)
+            profile.save()
+        if 'social' in data:
+            SocialLink.objects.all().delete()
+            for link in data['social']:
+                SocialLink.objects.create(**link)
+        return Response({'message': 'Contact info updated successfully'})
 
 
 @api_view(['POST'])

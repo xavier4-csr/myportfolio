@@ -26,6 +26,9 @@ class PortfolioApp {
             // Set up event listeners
             this.setupEventListeners();
 
+            // Add profile edit logic
+            this.setupProfileEdit();
+
             // Initialize footer
             this.ui.initializeFooter();
 
@@ -35,6 +38,53 @@ class PortfolioApp {
         } catch (error) {
             console.error('Failed to initialize portfolio app:', error);
         }
+    }
+
+    // Removed inline edit logic; all edits are now backend-only
+
+    setupEditSection({btnId, formId, cancelId, fields, endpoint, bodyBuilder}) {
+        const editBtn = document.getElementById(btnId);
+        const editForm = document.getElementById(formId);
+        const cancelBtn = document.getElementById(cancelId);
+        if (!editBtn || !editForm) return;
+        editBtn.addEventListener('click', () => {
+            // Fill form with current values
+            fields.forEach(f => {
+                const input = document.getElementById(f.input);
+                const display = document.getElementById(f.display);
+                if (input && display) {
+                    input.value = display.textContent || display.innerText || '';
+                }
+            });
+            editForm.classList.remove('hidden');
+            editBtn.classList.add('hidden');
+        });
+        cancelBtn.addEventListener('click', () => {
+            editForm.classList.add('hidden');
+            editBtn.classList.remove('hidden');
+        });
+        editForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            // Update UI immediately
+            fields.forEach(f => {
+                const input = document.getElementById(f.input);
+                const display = document.getElementById(f.display);
+                if (input && display) {
+                    display.textContent = input.value;
+                }
+            });
+            editForm.classList.add('hidden');
+            editBtn.classList.remove('hidden');
+            // Send update to backend
+            try {
+                await window.portfolioAPI.request(endpoint, {
+                    method: 'PUT',
+                    body: JSON.stringify(bodyBuilder(fields.map(f => document.getElementById(f.input))))
+                });
+            } catch (err) {
+                alert('Failed to update section.');
+            }
+        });
     }
 
     // Initialize background animation
@@ -162,8 +212,18 @@ class PortfolioApp {
     async loadProfile() {
         try {
             const profile = await this.api.getProfile();
+            // Normalize API shape (backend vs fallback may differ)
+            const about = profile.about || {
+                journey: profile.about_journey,
+                interests: profile.about_interests,
+            };
+            const personalDetails = profile.personalDetails || {
+                email: profile.email,
+                location: profile.location,
+                experience: profile.experience_years,
+            };
             this.ui.renderProfile(profile);
-            this.ui.renderAbout(profile.about, profile.personalDetails);
+            this.ui.renderAbout(about, personalDetails);
         } catch (error) {
             console.error('Failed to load profile:', error);
         }

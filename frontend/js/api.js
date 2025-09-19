@@ -1,6 +1,6 @@
 // API Configuration
 const API_CONFIG = {
-    baseURL: 'http://localhost:3000/api', // Change this to your backend URL
+    baseURL: 'http://localhost:8000/api', // Updated to Django default port
     endpoints: {
         profile: '/profile',
         skills: '/skills',
@@ -31,11 +31,9 @@ class PortfolioAPI {
 
         try {
             const response = await fetch(url, finalOptions);
-            
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
             const data = await response.json();
             return { success: true, data };
         } catch (error) {

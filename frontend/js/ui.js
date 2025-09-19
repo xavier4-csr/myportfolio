@@ -70,7 +70,9 @@ class PortfolioUI {
             this.elements.userIntro.textContent = profile.intro;
         }
         if (this.elements.profileImage) {
-            this.elements.profileImage.src = profile.profileImage;
+            // Use backend field or fallback
+            const imgUrl = profile.profile_image || profile.profileImage || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face";
+            this.elements.profileImage.src = imgUrl;
             this.elements.profileImage.alt = profile.name;
         }
         if (this.elements.footerName) {
