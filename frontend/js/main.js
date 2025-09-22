@@ -26,8 +26,7 @@ class PortfolioApp {
             // Set up event listeners
             this.setupEventListeners();
 
-            // Add profile edit logic
-            this.setupProfileEdit();
+            // Inline edit logic removed; all edits are backend-only
 
             // Initialize footer
             this.ui.initializeFooter();
@@ -42,50 +41,7 @@ class PortfolioApp {
 
     // Removed inline edit logic; all edits are now backend-only
 
-    setupEditSection({btnId, formId, cancelId, fields, endpoint, bodyBuilder}) {
-        const editBtn = document.getElementById(btnId);
-        const editForm = document.getElementById(formId);
-        const cancelBtn = document.getElementById(cancelId);
-        if (!editBtn || !editForm) return;
-        editBtn.addEventListener('click', () => {
-            // Fill form with current values
-            fields.forEach(f => {
-                const input = document.getElementById(f.input);
-                const display = document.getElementById(f.display);
-                if (input && display) {
-                    input.value = display.textContent || display.innerText || '';
-                }
-            });
-            editForm.classList.remove('hidden');
-            editBtn.classList.add('hidden');
-        });
-        cancelBtn.addEventListener('click', () => {
-            editForm.classList.add('hidden');
-            editBtn.classList.remove('hidden');
-        });
-        editForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            // Update UI immediately
-            fields.forEach(f => {
-                const input = document.getElementById(f.input);
-                const display = document.getElementById(f.display);
-                if (input && display) {
-                    display.textContent = input.value;
-                }
-            });
-            editForm.classList.add('hidden');
-            editBtn.classList.remove('hidden');
-            // Send update to backend
-            try {
-                await window.portfolioAPI.request(endpoint, {
-                    method: 'PUT',
-                    body: JSON.stringify(bodyBuilder(fields.map(f => document.getElementById(f.input))))
-                });
-            } catch (err) {
-                alert('Failed to update section.');
-            }
-        });
-    }
+    // Removed setupEditSection and all inline edit logic for robustness
 
     // Initialize background animation
     initBackground() {
