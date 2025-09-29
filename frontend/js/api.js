@@ -102,9 +102,12 @@ class PortfolioAPI {
         return this.getDefaultContact();
     }
 
-    // POST send contact message
-    async sendMessage(messageData) {
-        return this.post(this.endpoints.sendMessage, messageData);
+    async sendContactMessage(data) {
+    return await this.request('/contact/send/', { // <-- trailing slash added
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+        });
     }
 
     // Default/fallback data methods

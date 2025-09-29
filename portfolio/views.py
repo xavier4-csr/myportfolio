@@ -305,10 +305,14 @@ def send_message_view(request):
                 email_message,
                 settings.DEFAULT_FROM_EMAIL,
                 [settings.CONTACT_EMAIL],
-                fail_silently=True,
+                fail_silently=False,
             )
         except Exception as e:
             print(f"Failed to send email: {e}")
+            return Response(
+                {'error': f"Failed to send email: {str(e)}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
         
         return Response(
             {'message': 'Message sent successfully!', 'id': message.id},

@@ -126,9 +126,13 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'noreply@yourportfolio.com'
-CONTACT_EMAIL = 'your-email@example.com'
-
-
+# Email settings (for contact form)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'david.luhayi@strathmore.edu'
+EMAIL_HOST_PASSWORD = 'jmaa emym kqeh thbj'
+DEFAULT_FROM_EMAIL = 'david.luhayi@strathmore.edu'
+CONTACT_EMAIL = 'david.luhayi@strathmore.edu'
 

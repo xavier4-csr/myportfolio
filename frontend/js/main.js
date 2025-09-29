@@ -273,7 +273,7 @@ class PortfolioApp {
         this.ui.setFormSubmitting(true);
 
         try {
-            const result = await this.api.sendMessage(messageData);
+            const result = await this.api.sendContactMessage(messageData);
             
             if (result.success) {
                 this.ui.showSuccessMessage(form, 'Message sent successfully! Thank you for reaching out.');
