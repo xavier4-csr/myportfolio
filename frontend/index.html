@@ -3,21 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Developer Portfolio</title>
-    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
-    
+
+    <!-- SEO Meta Tags -->
+    <title>Full Stack Developer Portfolio</title>
+    <meta name="description" content="Full Stack Developer specializing in React, Django, and modern web technologies. View my portfolio of projects and get in touch.">
+    <meta name="keywords" content="full stack developer, react, django, python, javascript, web development, portfolio">
+    <meta name="author" content="Your Name">
+    <link rel="canonical" href="https://yourportfolio.com">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="John Doe - Full Stack Developer Portfolio">
+    <meta property="og:description" content="Full Stack Developer specializing in React, Django, and modern web technologies.">
+    <meta property="og:image" content="https://yourportfolio.com/assets/og-image.jpg">
+    <meta property="og:url" content="https://yourportfolio.com">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:creator" content="@yourtwitterhandle">
+
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="manifest" href="/assets/site.webmanifest">
+
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="https://cdn.tailwindcss.com" as="style">
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="preload" href="js/main.js" as="script">
+
     <!-- External CSS Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#3b82f6">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Your Name",
+        "jobTitle": "Full Stack Developer",
+        "url": "https://yourportfolio.com",
+        "sameAs": [
+            "https://github.com/yourusername",
+            "https://linkedin.com/in/yourusername"
+        ],
+        "knowsAbout": ["Web Development", "React", "Django", "Python", "JavaScript"]
+    }
+    </script>
 </head>
 <body class="font-sans antialiased text-gray-800 bg-gray-50">
-    <div id="vanta-bg" class="vanta-bg"></div>
-    
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+    <div id="vanta-bg" class="vanta-bg" aria-hidden="true"></div>
+
     <!-- Navigation -->
-    <nav class="fixed w-full bg-white bg-opacity-90 shadow-sm z-50">
+    <nav class="fixed w-full bg-white bg-opacity-90 shadow-sm z-50" role="navigation" aria-label="Main navigation">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
@@ -32,8 +82,8 @@
                     <a href="#contact" class="nav-link">Contact</a>
                 </div>
                 <div class="md:hidden flex items-center">
-                    <button id="menu-btn" class="text-gray-700">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button id="menu-btn" class="text-gray-700" aria-label="Toggle mobile menu" aria-expanded="false">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
@@ -43,7 +93,7 @@
     </nav>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden fixed inset-0 bg-white z-40 pt-16">
+    <div id="mobile-menu" class="hidden fixed inset-0 bg-white z-40 pt-16" role="dialog" aria-label="Mobile menu">
         <div class="flex flex-col items-center space-y-8 py-8">
             <a href="#home" class="mobile-nav-link">Home</a>
             <a href="#about" class="mobile-nav-link">About</a>
@@ -54,183 +104,259 @@
         </div>
     </div>
 
-    <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center justify-center pt-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div data-aos="fade-right">
-                    <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
-                        Hi, I'm <span class="text-blue-600" id="user-name">[Your Name]</span>
-                    </h1>
-                    <h2 class="text-2xl md:text-3xl font-semibold text-gray-700 mb-6" id="user-title">Full Stack Developer</h2>
-                    <p class="text-lg text-gray-600 mb-8" id="user-intro">Building digital experiences that matter. Passionate about solving problems through code.</p>
-                    <div class="flex space-x-4">
-                        <a href="#contact" class="btn-primary">Contact Me</a>
-                        <a href="#projects" class="btn-secondary">View Projects</a>
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section id="home" class="min-h-screen flex items-center justify-center pt-16" aria-label="Hero section">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div data-aos="fade-right">
+                        <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
+                            Hi, I'm <span class="text-blue-600" id="user-name">[Your Name]</span>
+                        </h1>
+                        <h2 class="text-2xl md:text-3xl font-semibold text-gray-700 mb-6" id="user-title">Full Stack Developer</h2>
+                        <p class="text-lg text-gray-600 mb-8" id="user-intro">Building digital experiences that matter. Passionate about solving problems through code.</p>
+                        <div class="flex space-x-4">
+                            <a href="#contact" class="btn-primary">Contact Me</a>
+                            <a href="#projects" class="btn-secondary">View Projects</a>
+                        </div>
                     </div>
-                </div>
-                <div data-aos="fade-left" class="flex justify-center">
-                    <div class="relative">
-                        <div class="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-white shadow-xl">
-                            <img id="profile-image" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face" alt="Profile" class="w-full h-full object-cover">
+                    <div data-aos="fade-left" class="flex justify-center">
+                        <div class="relative">
+                            <div class="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-white shadow-xl">
+                                <img id="profile-image"
+                                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face"
+                                     alt="Profile photo"
+                                     class="w-full h-full object-cover"
+                                     loading="eager">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- About Section -->
-    <section id="about" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="section-header" data-aos="fade-up">
-                <h2 class="section-title">About Me</h2>
-                <div class="section-divider"></div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div data-aos="fade-right" id="about-content">
-                    <!-- Content will be loaded from API -->
+        <!-- About Section -->
+        <section id="about" class="py-20 bg-white" aria-label="About me">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="section-header" data-aos="fade-up">
+                    <h2 class="section-title">About Me</h2>
+                    <div class="section-divider"></div>
                 </div>
-                <div data-aos="fade-left">
-                    <div class="bg-gray-50 p-8 rounded-xl shadow-sm">
-                        <h4 class="text-xl font-semibold text-gray-800 mb-6">Personal Details</h4>
-                        <div class="space-y-4" id="personal-details">
-                            <!-- Details will be loaded from API -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div data-aos="fade-right" id="about-content">
+                        <!-- Content will be loaded from API -->
+                        <div class="skeleton" style="height: 200px; margin-bottom: 1rem;"></div>
+                    </div>
+                    <div data-aos="fade-left">
+                        <div class="bg-gray-50 p-8 rounded-xl shadow-sm">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-6">Personal Details</h3>
+                            <div class="space-y-4" id="personal-details">
+                                <!-- Details will be loaded from API -->
+                                <div class="skeleton" style="height: 60px; margin-bottom: 1rem;"></div>
+                                <div class="skeleton" style="height: 60px; margin-bottom: 1rem;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Skills Section -->
-    <section id="skills" class="py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="section-header" data-aos="fade-up">
-                <h2 class="section-title">Skills & Technologies</h2>
-                <div class="section-divider"></div>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <div data-aos="fade-right">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-6">Technical Skills</h3>
-                    <div class="space-y-6" id="technical-skills">
-                        <!-- Skills will be loaded from API -->
-                    </div>
+        <!-- Skills Section -->
+        <section id="skills" class="py-20 bg-gray-50" aria-label="Skills and technologies">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="section-header" data-aos="fade-up">
+                    <h2 class="section-title">Skills & Technologies</h2>
+                    <div class="section-divider"></div>
                 </div>
-                <div data-aos="fade-left">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-6">Professional Skills</h3>
-                    <div class="grid grid-cols-2 gap-4" id="professional-skills">
-                        <!-- Professional skills will be loaded from API -->
-                    </div>
-                </div>
-            </div>
 
-            <div data-aos="fade-up">
-                <h3 class="text-xl font-semibold text-gray-800 mb-6 text-center">Technologies I Work With</h3>
-                <div class="flex flex-wrap justify-center gap-6" id="technologies">
-                    <!-- Technologies will be loaded from API -->
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="section-header" data-aos="fade-up">
-                <h2 class="section-title">Featured Projects</h2>
-                <div class="section-divider"></div>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-container">
-                <!-- Projects will be loaded from API -->
-            </div>
-            
-            <div class="text-center mt-12" data-aos="fade-up">
-                <button id="load-more-projects" class="btn-secondary-outline">
-                    View All Projects
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience" class="py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="section-header" data-aos="fade-up">
-                <h2 class="section-title">Experience & Education</h2>
-                <div class="section-divider"></div>
-            </div>
-            
-            <div class="relative">
-                <div class="space-y-8 pl-8" id="timeline">
-                    <!-- Timeline items will be loaded from API -->
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="section-header" data-aos="fade-up">
-                <h2 class="section-title">Get In Touch</h2>
-                <div class="section-divider"></div>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <div data-aos="fade-right">
-                    <h3 class="text-2xl font-semibold text-gray-800 mb-6">Contact Information</h3>
-                    <div class="space-y-6" id="contact-info">
-                        <!-- Contact info will be loaded from API -->
-                    </div>
-                    
-                    <div class="mt-10">
-                        <h4 class="text-xl font-semibold text-gray-800 mb-4">Connect With Me</h4>
-                        <div class="flex space-x-4" id="social-links">
-                            <!-- Social links will be loaded from API -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    <div data-aos="fade-right">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-6">Technical Skills</h3>
+                        <div class="space-y-6" id="technical-skills">
+                            <!-- Skills will be loaded from API -->
+                            <div class="skeleton" style="height: 40px; margin-bottom: 1rem;"></div>
+                            <div class="skeleton" style="height: 40px; margin-bottom: 1rem;"></div>
+                            <div class="skeleton" style="height: 40px; margin-bottom: 1rem;"></div>
                         </div>
                     </div>
-                    
-                    <div class="mt-10">
-                        <a href="#" id="download-resume" class="btn-primary">
-                            Download Resume
-                        </a>
+                    <div data-aos="fade-left">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-6">Professional Skills</h3>
+                        <div class="grid grid-cols-2 gap-4" id="professional-skills">
+                            <!-- Professional skills will be loaded from API -->
+                            <div class="skeleton" style="height: 60px;"></div>
+                            <div class="skeleton" style="height: 60px;"></div>
+                            <div class="skeleton" style="height: 60px;"></div>
+                            <div class="skeleton" style="height: 60px;"></div>
+                        </div>
                     </div>
                 </div>
-                
-                <div data-aos="fade-left">
-                    <h3 class="text-2xl font-semibold text-gray-800 mb-6">Send Me a Message</h3>
-                    <form id="contact-form" class="space-y-6">
-                        <div>
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" id="name" name="name" class="form-input" required>
-                        </div>
-                        <div>
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" id="email" name="email" class="form-input" required>
-                        </div>
-                        <div>
-                            <label for="subject" class="form-label">Subject</label>
-                            <input type="text" id="subject" name="subject" class="form-input" required>
-                        </div>
-                        <div>
-                            <label for="message" class="form-label">Message</label>
-                            <textarea id="message" name="message" rows="5" class="form-input" required></textarea>
-                        </div>
-                        <button type="submit" class="btn-primary w-full">
-                            <span id="submit-text">Send Message</span>
-                            <span id="loading-text" class="hidden">Sending...</span>
-                        </button>
-                    </form>
+
+                <div data-aos="fade-up">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-6 text-center">Technologies I Work With</h3>
+                    <div class="flex flex-wrap justify-center gap-6" id="technologies">
+                        <!-- Technologies will be loaded from API -->
+                        <div class="skeleton w-12 h-12 rounded"></div>
+                        <div class="skeleton w-12 h-12 rounded"></div>
+                        <div class="skeleton w-12 h-12 rounded"></div>
+                        <div class="skeleton w-12 h-12 rounded"></div>
+                        <div class="skeleton w-12 h-12 rounded"></div>
+                        <div class="skeleton w-12 h-12 rounded"></div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-20 bg-white" aria-label="Featured projects">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="section-header" data-aos="fade-up">
+                    <h2 class="section-title">Featured Projects</h2>
+                    <div class="section-divider"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-container">
+                    <!-- Projects will be loaded from API -->
+                    <div class="skeleton" style="height: 350px; border-radius: 12px;"></div>
+                    <div class="skeleton" style="height: 350px; border-radius: 12px;"></div>
+                    <div class="skeleton" style="height: 350px; border-radius: 12px;"></div>
+                </div>
+
+                <div class="text-center mt-12" data-aos="fade-up">
+                    <button id="load-more-projects" class="btn-secondary-outline">
+                        View All Projects
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="py-20 bg-gray-50" aria-label="Work experience and education">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="section-header" data-aos="fade-up">
+                    <h2 class="section-title">Experience & Education</h2>
+                    <div class="section-divider"></div>
+                </div>
+
+                <div class="relative">
+                    <div class="space-y-8 pl-8" id="timeline">
+                        <!-- Timeline items will be loaded from API -->
+                        <div class="skeleton" style="height: 120px; margin-bottom: 2rem;"></div>
+                        <div class="skeleton" style="height: 120px; margin-bottom: 2rem;"></div>
+                        <div class="skeleton" style="height: 120px; margin-bottom: 2rem;"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 bg-white" aria-label="Contact information">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="section-header" data-aos="fade-up">
+                    <h2 class="section-title">Get In Touch</h2>
+                    <div class="section-divider"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div data-aos="fade-right">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-6">Contact Information</h3>
+                        <div class="space-y-6" id="contact-info">
+                            <!-- Contact info will be loaded from API -->
+                            <div class="skeleton" style="height: 60px; margin-bottom: 1rem;"></div>
+                            <div class="skeleton" style="height: 60px; margin-bottom: 1rem;"></div>
+                            <div class="skeleton" style="height: 60px; margin-bottom: 1rem;"></div>
+                        </div>
+
+                        <div class="mt-10">
+                            <h4 class="text-xl font-semibold text-gray-800 mb-4">Connect With Me</h4>
+                            <div class="flex space-x-4" id="social-links">
+                                <!-- Social links will be loaded from API -->
+                                <div class="skeleton w-12 h-12 rounded-full"></div>
+                                <div class="skeleton w-12 h-12 rounded-full"></div>
+                                <div class="skeleton w-12 h-12 rounded-full"></div>
+                                <div class="skeleton w-12 h-12 rounded-full"></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-10">
+                            <a href="#" id="download-resume" class="btn-primary" style="display: none;">
+                                <svg class="mr-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Download Resume
+                            </a>
+                        </div>
+                    </div>
+
+                    <div data-aos="fade-left">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-6">Send Me a Message</h3>
+                        <form id="contact-form" class="space-y-6" novalidate>
+                            <div>
+                                <label for="name" class="form-label">Name <span class="text-red-500">*</span></label>
+                                <input type="text"
+                                       id="name"
+                                       name="name"
+                                       class="form-input"
+                                       required
+                                       minlength="2"
+                                       maxlength="100"
+                                       aria-describedby="name-error">
+                                <div id="name-error" class="error-field" aria-live="polite"></div>
+                            </div>
+                            <div>
+                                <label for="email" class="form-label">Email <span class="text-red-500">*</span></label>
+                                <input type="email"
+                                       id="email"
+                                       name="email"
+                                       class="form-input"
+                                       required
+                                       maxlength="254"
+                                       aria-describedby="email-error">
+                                <div id="email-error" class="error-field" aria-live="polite"></div>
+                            </div>
+                            <div>
+                                <label for="subject" class="form-label">Subject <span class="text-red-500">*</span></label>
+                                <input type="text"
+                                       id="subject"
+                                       name="subject"
+                                       class="form-input"
+                                       required
+                                       minlength="5"
+                                       maxlength="200"
+                                       aria-describedby="subject-error">
+                                <div id="subject-error" class="error-field" aria-live="polite"></div>
+                            </div>
+                            <div>
+                                <label for="message" class="form-label">Message <span class="text-red-500">*</span></label>
+                                <textarea id="message"
+                                          name="message"
+                                          rows="5"
+                                          class="form-input"
+                                          required
+                                          minlength="10"
+                                          maxlength="1000"
+                                          aria-describedby="message-error"></textarea>
+                                <div id="message-error" class="error-field" aria-live="polite"></div>
+                            </div>
+                            <button type="submit" class="btn-primary w-full" aria-describedby="form-status">
+                                <span id="submit-text">Send Message</span>
+                                <span id="loading-text" class="hidden">
+                                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Sending...
+                                </span>
+                            </button>
+                            <div id="form-status" aria-live="polite"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
+    <footer class="bg-gray-900 text-white py-12" role="contentinfo">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
@@ -260,13 +386,57 @@
         </div>
     </footer>
 
+    <!-- Error Boundary -->
+    <div id="error-boundary" class="hidden fixed top-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded z-50" role="alert">
+        <div class="flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            </svg>
+            <span id="error-message">Something went wrong. Please refresh the page.</span>
+            <button onclick="this.parentElement.parentElement.classList.add('hidden')" class="ml-2 text-red-900 hover:text-red-800" aria-label="Dismiss error">
+                ×
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Critical inline script for immediate functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add loading class to body to prevent flash of unstyled content
+            document.body.classList.add('loading');
+
+            // Remove loading class after a short delay
+            setTimeout(() => {
+                document.body.classList.remove('loading');
+            }, 100);
+        });
+    </script>
+
     <!-- External Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
-    
+
     <!-- Custom Scripts -->
+    <script src="js/utils.js"></script>
     <script src="js/api.js"></script>
     <script src="js/ui.js"></script>
+    <script src="js/interactions.js"></script>
     <script src="js/main.js"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(function(registrationError) {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>
