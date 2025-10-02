@@ -20,15 +20,28 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class ProjectListSerializer(serializers.ModelSerializer):
+    technologies = serializers.StringRelatedField(many=True, read_only=True)
+    
     class Meta:
         model = Project
-        fields = ['id', 'title', 'description', 'image', 'github_url', 'live_url', 'is_featured']
+        fields = ['id', 'title', 'description', 'image', 'github_url', 'live_url', 'is_featured', 'technologies']
 
 
 class ExperienceSerializer(serializers.ModelSerializer):
+    period = serializers.SerializerMethodField()
+    
     class Meta:
         model = Experience
         fields = '__all__'
+    
+    def get_period(self, obj):
+        from datetime import date
+        if obj.is_current:
+            return f"{obj.start_date.strftime('%Y')} - Present"
+        elif obj.end_date:
+            return f"{obj.start_date.strftime('%Y')} - {obj.end_date.strftime('%Y')}"
+        else:
+            return f"{obj.start_date.strftime('%Y')}"
 
 
 class ContactInfoSerializer(serializers.Serializer):

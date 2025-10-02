@@ -45,21 +45,77 @@ class ProfileView(generics.RetrieveAPIView):
 @api_view(['GET', 'PUT'])
 def skills_view(request):
     """Get all skills data"""
-    technical_skills = TechnicalSkill.objects.filter(is_active=True)
-    professional_skills = ProfessionalSkill.objects.filter(is_active=True)
-    technologies = Technology.objects.filter(is_active=True)
-    
-    # If no skills exist, create some defaults
-    if not technical_skills.exists():
-        default_technical = [
-            {'name': 'JavaScript', 'level': 90, 'category': 'Programming'},
-            {'name': 'React', 'level': 85, 'category': 'Frontend'},
-            {'name': 'Python', 'level': 80, 'category': 'Programming'},
-            {'name': 'Django', 'level': 75, 'category': 'Backend'},
-            {'name': 'PostgreSQL', 'level': 70, 'category': 'Database'},
-        ]
-        for skill_data in default_technical:
-            TechnicalSkill.objects.create(**skill_data)
+    if request.method == 'GET':
+        technical_skills = TechnicalSkill.objects.filter(is_active=True)
+        professional_skills = ProfessionalSkill.objects.filter(is_active=True)
+        technologies = Technology.objects.filter(is_active=True)
+
+        # If no skills exist, create some defaults
+        if not technical_skills.exists():
+            default_technical = [
+                {'name': 'JavaScript', 'level': 90, 'category': 'Programming'},
+                {'name': 'React', 'level': 85, 'category': 'Frontend'},
+                {'name': 'Python', 'level': 80, 'category': 'Programming'},
+                {'name': 'Django', 'level': 75, 'category': 'Backend'},
+                {'name': 'PostgreSQL', 'level': 70, 'category': 'Database'},
+            ]
+            for skill_data in default_technical:
+                TechnicalSkill.objects.create(**skill_data)
+            technical_skills = TechnicalSkill.objects.filter(is_active=True)
+
+        # Create defaults for professional skills if none exist
+        if not professional_skills.exists():
+            default_professional = [
+                {'name': 'Communication', 'icon': 'message-square', 'description': 'Effective verbal and written communication skills'},
+                {'name': 'Teamwork', 'icon': 'users', 'description': 'Collaborative team player with strong interpersonal skills'},
+                {'name': 'Problem Solving', 'icon': 'brain', 'description': 'Analytical thinking and creative problem resolution'},
+                {'name': 'Time Management', 'icon': 'clock', 'description': 'Efficient task prioritization and deadline management'},
+            ]
+            for skill_data in default_professional:
+                ProfessionalSkill.objects.create(**skill_data)
+            professional_skills = ProfessionalSkill.objects.filter(is_active=True)
+
+        # Create defaults for technologies if none exist
+        if not technologies.exists():
+            default_technologies = [
+                {'name': 'React', 'icon_url': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg', 'category': 'Frontend'},
+                {'name': 'Django', 'icon_url': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg', 'category': 'Backend'},
+                {'name': 'Python', 'icon_url': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', 'category': 'Programming'},
+                {'name': 'JavaScript', 'icon_url': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg', 'category': 'Programming'},
+                {'name': 'PostgreSQL', 'icon_url': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg', 'category': 'Database'},
+                {'name': 'Git', 'icon_url': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg', 'category': 'Tools'},
+            ]
+            for tech_data in default_technologies:
+                Technology.objects.create(**tech_data)
+            technologies = Technology.objects.filter(is_active=True)
+
+        # Serialize the data
+        technical_data = [{'name': skill.name, 'level': skill.level, 'category': skill.category} for skill in technical_skills]
+        professional_data = [{'name': skill.name, 'icon': skill.icon, 'description': skill.description} for skill in professional_skills]
+        technologies_data = [{'name': tech.name, 'icon': tech.icon_url, 'category': tech.category} for tech in technologies]
+
+        response_data = {
+            'technical': technical_data,
+            'professional': professional_data,
+            'technologies': technologies_data
+        }
+        return Response(response_data)
+
+    elif request.method == 'PUT':
+        data = request.data
+        if 'technical' in data:
+            TechnicalSkill.objects.all().delete()
+            for skill in data['technical']:
+                TechnicalSkill.objects.create(**skill)
+        if 'professional' in data:
+            ProfessionalSkill.objects.all().delete()
+            for skill in data['professional']:
+                ProfessionalSkill.objects.create(**skill)
+        if 'technologies' in data:
+            Technology.objects.all().delete()
+            for tech in data['technologies']:
+                Technology.objects.create(**tech)
+        return Response({'message': 'Skills updated successfully'})
 class ProjectListView(generics.ListAPIView):
     """Get list of projects and allow updates"""
     serializer_class = ProjectListSerializer
@@ -123,52 +179,6 @@ class ProjectListView(generics.ListAPIView):
             else:
                 Project.objects.create(title=str(proj))
         return Response({'message': 'Projects updated successfully'})
-
-    def get_queryset(self):
-        queryset = Project.objects.filter(is_active=True)
-        featured_only = self.request.query_params.get('featured', None)
-        if featured_only == 'true':
-            queryset = queryset.filter(is_featured=True)
-        limit = self.request.query_params.get('limit', None)
-        if limit:
-            try:
-                limit = int(limit)
-                queryset = queryset[:limit]
-            except ValueError:
-                pass
-        if not queryset.exists() and not Project.objects.exists():
-            self.create_default_projects()
-            queryset = Project.objects.filter(is_active=True)
-        return queryset
-    
-    def create_default_projects(self):
-        """Create default projects if none exist"""
-        default_projects = [
-            {
-                'title': 'E-commerce Platform',
-                'description': 'A full-featured e-commerce platform with payment integration and admin dashboard.',
-                'github_url': 'https://github.com/yourusername/ecommerce-platform',
-                'live_url': 'https://your-ecommerce-demo.com',
-                'is_featured': True,
-            },
-            {
-                'title': 'Task Management App',
-                'description': 'A collaborative task management application with real-time updates.',
-                'github_url': 'https://github.com/yourusername/task-manager',
-                'live_url': 'https://your-task-app.com',
-                'is_featured': True,
-            },
-            {
-                'title': 'Portfolio Website',
-                'description': 'A responsive portfolio website showcasing my work and skills.',
-                'github_url': 'https://github.com/yourusername/portfolio',
-                'live_url': 'https://your-portfolio.com',
-                'is_featured': True,
-            }
-        ]
-        
-        for project_data in default_projects:
-            Project.objects.create(**project_data)
 
 
 class ProjectDetailView(generics.RetrieveAPIView):

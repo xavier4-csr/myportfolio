@@ -35,6 +35,7 @@ class PortfolioAPI {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
+            console.log(`API response for ${endpoint}:`, data);
             return { success: true, data };
         } catch (error) {
             console.error('API request failed:', error);
@@ -79,7 +80,15 @@ class PortfolioAPI {
         const endpoint = limit ? `${this.endpoints.projects}?limit=${limit}` : this.endpoints.projects;
         const result = await this.get(endpoint);
         if (result.success) {
-            return result.data;
+            // If data is an object with 'results' key, extract array
+            if (result.data && Array.isArray(result.data)) {
+                return result.data;
+            } else if (result.data && Array.isArray(result.data.results)) {
+                return result.data.results;
+            } else {
+                console.warn('Unexpected projects data format:', result.data);
+                return [];
+            }
         }
         return this.getDefaultProjects();
     }
@@ -88,7 +97,14 @@ class PortfolioAPI {
     async getExperience() {
         const result = await this.get(this.endpoints.experience);
         if (result.success) {
-            return result.data;
+            if (result.data && Array.isArray(result.data)) {
+                return result.data;
+            } else if (result.data && Array.isArray(result.data.results)) {
+                return result.data.results;
+            } else {
+                console.warn('Unexpected experience data format:', result.data);
+                return [];
+            }
         }
         return this.getDefaultExperience();
     }

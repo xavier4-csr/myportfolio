@@ -195,7 +195,7 @@ class PortfolioUI {
             <div class="project-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300" 
                  data-aos="fade-up" data-aos-delay="${(index + 1) * 100}">
                 <div class="h-48 overflow-hidden">
-                    <img src="${project.image_url}" alt="${project.title}" class="w-full h-full object-cover">
+                    <img src="${project.image}" alt="${project.title}" class="w-full h-full object-cover">
                 </div>
                 <div class="p-6">
                     <div class="flex justify-between items-start mb-2">

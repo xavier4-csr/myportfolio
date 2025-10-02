@@ -98,6 +98,15 @@ class PortfolioApp {
             loadMoreBtn.addEventListener('click', this.loadAllProjects.bind(this));
         }
 
+        // Refresh skills button
+        const refreshSkillsBtn = document.getElementById('refresh-skills-btn');
+        if (refreshSkillsBtn) {
+            console.log('Refresh skills button found, adding event listener');
+            refreshSkillsBtn.addEventListener('click', this.refreshSkills.bind(this));
+        } else {
+            console.log('Refresh skills button not found');
+        }
+
         // Smooth scrolling for navigation links
         this.setupSmoothScrolling();
 
@@ -198,7 +207,7 @@ class PortfolioApp {
     // Load featured projects
     async loadFeaturedProjects() {
         try {
-            const projects = await this.api.getProjects(true, 6); // Featured projects, limit 6
+            const projects = await this.api.getProjects(6); // Featured projects, limit 6
             this.ui.renderProjects(projects);
         } catch (error) {
             console.error('Failed to load featured projects:', error);
